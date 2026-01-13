@@ -1,6 +1,7 @@
 require('dotenv').config();
 const { Client, GatewayIntentBits, Collection } = require('discord.js');
 const teamsCommand = require('./commands/teams');
+const positionsCommand = require('./commands/positions');
 
 // Create Discord client with necessary intents
 const client = new Client({
@@ -13,6 +14,7 @@ const client = new Client({
 // Store commands in a collection
 client.commands = new Collection();
 client.commands.set(teamsCommand.data.name, teamsCommand);
+client.commands.set(positionsCommand.data.name, positionsCommand);
 
 // Bot ready event
 client.once('ready', () => {
@@ -34,9 +36,9 @@ client.on('interactionCreate', async (interaction) => {
     await command.execute(interaction);
   } catch (error) {
     console.error(`Error executing ${interaction.commandName}:`, error);
-    
+
     const errorMessage = { content: '❌ There was an error executing this command!', ephemeral: true };
-    
+
     if (interaction.replied || interaction.deferred) {
       await interaction.followUp(errorMessage);
     } else {

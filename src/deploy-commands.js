@@ -1,8 +1,9 @@
 require('dotenv').config();
 const { REST, Routes } = require('discord.js');
 const teamsCommand = require('./commands/teams');
+const positionsCommand = require('./commands/positions');
 
-const commands = [teamsCommand.data.toJSON()];
+const commands = [teamsCommand.data.toJSON(), positionsCommand.data.toJSON()];
 
 const rest = new REST().setToken(process.env.DISCORD_TOKEN);
 

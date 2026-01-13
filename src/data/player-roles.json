@@ -1,0 +1,21 @@
+{
+    "PlayerName1": [
+        "attack"
+    ],
+    "PlayerName2": [
+        "midfield",
+        "attack"
+    ],
+    "PlayerName3": [
+        "defense",
+        "midfield"
+    ],
+    "PlayerName4": [
+        "defense"
+    ],
+    "PlayerName5": [
+        "attack",
+        "midfield",
+        "defense"
+    ]
+}
