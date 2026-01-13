@@ -1,0 +1,49 @@
+require('dotenv').config();
+const { Client, GatewayIntentBits, Collection } = require('discord.js');
+const teamsCommand = require('./commands/teams');
+
+// Create Discord client with necessary intents
+const client = new Client({
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildVoiceStates,
+  ],
+});
+
+// Store commands in a collection
+client.commands = new Collection();
+client.commands.set(teamsCommand.data.name, teamsCommand);
+
+// Bot ready event
+client.once('ready', () => {
+  console.log(`✅ Bot is ready! Logged in as ${client.user.tag}`);
+});
+
+// Handle slash command interactions
+client.on('interactionCreate', async (interaction) => {
+  if (!interaction.isChatInputCommand()) return;
+
+  const command = client.commands.get(interaction.commandName);
+
+  if (!command) {
+    console.error(`No command matching ${interaction.commandName} was found.`);
+    return;
+  }
+
+  try {
+    await command.execute(interaction);
+  } catch (error) {
+    console.error(`Error executing ${interaction.commandName}:`, error);
+    
+    const errorMessage = { content: '❌ There was an error executing this command!', ephemeral: true };
+    
+    if (interaction.replied || interaction.deferred) {
+      await interaction.followUp(errorMessage);
+    } else {
+      await interaction.reply(errorMessage);
+    }
+  }
+});
+
+// Login to Discord
+client.login(process.env.DISCORD_TOKEN);
