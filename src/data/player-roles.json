@@ -1,21 +1,26 @@
 {
     "PlayerName1": [
-        "attack"
+        "ST",
+        "RW",
+        "LW"
     ],
     "PlayerName2": [
-        "midfield",
-        "attack"
+        "CAM",
+        "CM"
     ],
     "PlayerName3": [
-        "defense",
-        "midfield"
+        "CDM",
+        "CB"
     ],
     "PlayerName4": [
-        "defense"
+        "CB",
+        "LB",
+        "RB"
     ],
     "PlayerName5": [
-        "attack",
-        "midfield",
-        "defense"
+        "ST",
+        "CAM",
+        "RW",
+        "LW"
     ]
 }

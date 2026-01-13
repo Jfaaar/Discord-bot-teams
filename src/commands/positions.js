@@ -51,22 +51,23 @@ function loadPlayerRoles() {
 }
 
 /**
- * Get player's allowed roles by display name
+ * Get player's allowed positions by display name
+ * Returns array of specific positions like ['CB', 'CDM', 'CAM']
  */
-function getPlayerRoles(playerName, rolesData) {
+function getPlayerPositions(playerName, rolesData) {
     // Try exact match first
     if (rolesData[playerName]) {
         return rolesData[playerName];
     }
     // Try case-insensitive match
     const lowerName = playerName.toLowerCase();
-    for (const [name, roles] of Object.entries(rolesData)) {
+    for (const [name, positions] of Object.entries(rolesData)) {
         if (name.toLowerCase() === lowerName) {
-            return roles;
+            return positions;
         }
     }
     // Default: can play any position (flex player)
-    return ['attack', 'midfield', 'defense'];
+    return ['LB', 'CB', 'RB', 'CDM', 'CM', 'LM', 'RM', 'CAM', 'LW', 'RW', 'ST', 'LS', 'RS'];
 }
 
 /**
@@ -82,20 +83,19 @@ function shuffleArray(array) {
 }
 
 /**
- * Assign positions to players based on formation and roles
+ * Assign positions to players based on formation and their position preferences
  * Priority: Attack first, then Midfield, then Defense
  */
 function assignPositions(members, formation) {
     const rolesData = loadPlayerRoles();
     const positions = [...formation.positions];
     const assignments = [];
-    const unassigned = [];
 
-    // Build player list with their allowed roles
+    // Build player list with their allowed positions
     const players = members.map((member) => ({
         member,
         name: member.user.displayName,
-        roles: getPlayerRoles(member.user.displayName, rolesData),
+        positions: getPlayerPositions(member.user.displayName, rolesData),
         assigned: false,
     }));
 
@@ -107,11 +107,11 @@ function assignPositions(members, formation) {
     const midfieldPositions = positions.filter((p) => p.role === 'midfield');
     const defensePositions = positions.filter((p) => p.role === 'defense');
 
-    // Helper to assign a position
+    // Helper to assign a position - now matches by specific position name
     const assignPosition = (position, availablePlayers) => {
-        // Find player that can play this role
+        // Find player that can play this specific position
         const playerIdx = availablePlayers.findIndex(
-            (p) => !p.assigned && p.roles.includes(position.role)
+            (p) => !p.assigned && p.positions.includes(position.name)
         );
 
         if (playerIdx !== -1) {
@@ -160,12 +160,8 @@ function assignPositions(members, formation) {
         }
     }
 
-    // Track truly unassigned players
-    for (const player of shuffledPlayers) {
-        if (!player.assigned) {
-            unassigned.push(player.member);
-        }
-    }
+    // Track truly unassigned players (substitutes)
+    const unassigned = shuffledPlayers.filter((p) => !p.assigned).map((p) => p.member);
 
     return { assignments, unassigned };
 }
