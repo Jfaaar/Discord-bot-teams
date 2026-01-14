@@ -2,6 +2,7 @@ require('dotenv').config();
 const { Client, GatewayIntentBits, Collection } = require('discord.js');
 const teamsCommand = require('./commands/teams');
 const positionsCommand = require('./commands/positions');
+const qawdtihaCommand = require('./commands/9awdtiha');
 
 // Create Discord client with necessary intents
 const client = new Client({
@@ -15,6 +16,7 @@ const client = new Client({
 client.commands = new Collection();
 client.commands.set(teamsCommand.data.name, teamsCommand);
 client.commands.set(positionsCommand.data.name, positionsCommand);
+client.commands.set(qawdtihaCommand.data.name, qawdtihaCommand);
 
 // Bot ready event
 client.once('ready', () => {
