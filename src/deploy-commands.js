@@ -3,8 +3,16 @@ const { REST, Routes } = require('discord.js');
 const teamsCommand = require('./commands/teams');
 const positionsCommand = require('./commands/positions');
 const qawdtihaCommand = require('./commands/9awdtiha');
+const mergedCommand = require('./commands/merged');
+const skhiratCommand = require('./commands/skhirat');
 
-const commands = [teamsCommand.data.toJSON(), positionsCommand.data.toJSON(), qawdtihaCommand.data.toJSON()];
+const commands = [
+    teamsCommand.data.toJSON(),
+    positionsCommand.data.toJSON(),
+    qawdtihaCommand.data.toJSON(),
+    mergedCommand.data.toJSON(),
+    skhiratCommand.data.toJSON(),
+];
 
 const rest = new REST().setToken(process.env.DISCORD_TOKEN);
 
