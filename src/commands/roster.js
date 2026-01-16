@@ -41,59 +41,68 @@ module.exports = {
         .setDescription('Show online players and their possible positions'),
 
     async execute(interaction) {
-        await interaction.deferReply();
+        try {
+            await interaction.deferReply();
 
-        const { SOURCE_VOICE_CHANNEL_ID } = process.env;
+            const { SOURCE_VOICE_CHANNEL_ID } = process.env;
 
-        // Validate environment variable
-        if (!SOURCE_VOICE_CHANNEL_ID) {
-            return interaction.editReply('❌ Bot is not configured. Please set SOURCE_VOICE_CHANNEL_ID.');
-        }
-
-        // Fetch the source voice channel
-        const sourceChannel = await interaction.guild.channels
-            .fetch(SOURCE_VOICE_CHANNEL_ID)
-            .catch(() => null);
-
-        if (!sourceChannel || !sourceChannel.isVoiceBased()) {
-            return interaction.editReply('❌ Source voice channel not found.');
-        }
-
-        // Get members in the voice channel
-        const members = [...sourceChannel.members.values()];
-
-        if (members.length < 1) {
-            return interaction.editReply('❌ No players in the voice channel.');
-        }
-
-        // Load player roles
-        const rolesData = loadPlayerRoles();
-
-        // Build player list with positions
-        const playersList = members.map((member) => {
-            const name = member.user.displayName;
-            const positions = getPlayerPositions(name, rolesData);
-
-            if (positions) {
-                return `**${name}** → ${positions.join(', ')}`;
-            } else {
-                return `**${name}** → 🔄 *Flex (all positions)*`;
+            // Validate environment variable
+            if (!SOURCE_VOICE_CHANNEL_ID) {
+                return interaction.editReply('❌ Bot is not configured. Please set SOURCE_VOICE_CHANNEL_ID.');
             }
-        });
 
-        // Build the embed
-        const embed = new EmbedBuilder()
-            .setTitle(`📋 Current Roster - ${sourceChannel.name}`)
-            .setColor(0x5865F2)
-            .setDescription(playersList.join('\n'))
-            .addFields({
-                name: '📊 Summary',
-                value: `**${members.length}** players online`,
-                inline: true,
-            })
-            .setFooter({ text: 'Use /positions to assign positions based on formation' })
-            .setTimestamp();
+            // Fetch the source voice channel
+            const sourceChannel = await interaction.guild.channels
+                .fetch(SOURCE_VOICE_CHANNEL_ID)
+                .catch(() => null);
 
-        await interaction.editReply({ embeds: [embed] });
+            if (!sourceChannel || !sourceChannel.isVoiceBased()) {
+                return interaction.editReply('❌ Source voice channel not found.');
+            }
+
+            // Get members in the voice channel
+            const members = [...sourceChannel.members.values()];
+
+            if (members.length < 1) {
+                return interaction.editReply('❌ No players in the voice channel.');
+            }
+
+            // Load player roles
+            const rolesData = loadPlayerRoles();
+
+            // Build player list with positions
+            const playersList = members.map((member) => {
+                const name = member.user.displayName;
+                const positions = getPlayerPositions(name, rolesData);
+
+                if (positions) {
+                    return `**${name}** → ${positions.join(', ')}`;
+                } else {
+                    return `**${name}** → 🔄 *Flex (all positions)*`;
+                }
+            });
+
+            // Build the embed
+            const embed = new EmbedBuilder()
+                .setTitle(`📋 Current Roster - ${sourceChannel.name}`)
+                .setColor(0x5865F2)
+                .setDescription(playersList.join('\n'))
+                .addFields({
+                    name: '📊 Summary',
+                    value: `**${members.length}** players online`,
+                    inline: true,
+                })
+                .setFooter({ text: 'Use /positions to assign positions based on formation' })
+                .setTimestamp();
+
+            await interaction.editReply({ embeds: [embed] });
+        } catch (error) {
+            console.error('Error in /roster command:', error);
+            try {
+                await interaction.editReply('❌ An error occurred while fetching the roster.');
+            } catch (e) {
+                console.error('Failed to send error reply:', e);
+            }
+        }
     },
 };
