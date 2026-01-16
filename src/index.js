@@ -5,6 +5,7 @@ const positionsCommand = require('./commands/positions');
 const qawdtihaCommand = require('./commands/9awdtiha');
 const mergedCommand = require('./commands/merged');
 const skhiratCommand = require('./commands/skhirat');
+const rosterCommand = require('./commands/roster');
 
 // Create Discord client with necessary intents
 const client = new Client({
@@ -21,6 +22,7 @@ client.commands.set(positionsCommand.data.name, positionsCommand);
 client.commands.set(qawdtihaCommand.data.name, qawdtihaCommand);
 client.commands.set(mergedCommand.data.name, mergedCommand);
 client.commands.set(skhiratCommand.data.name, skhiratCommand);
+client.commands.set(rosterCommand.data.name, rosterCommand);
 
 // Bot ready event
 client.once('ready', () => {

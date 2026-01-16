@@ -5,6 +5,7 @@ const positionsCommand = require('./commands/positions');
 const qawdtihaCommand = require('./commands/9awdtiha');
 const mergedCommand = require('./commands/merged');
 const skhiratCommand = require('./commands/skhirat');
+const rosterCommand = require('./commands/roster');
 
 const commands = [
     teamsCommand.data.toJSON(),
@@ -12,6 +13,7 @@ const commands = [
     qawdtihaCommand.data.toJSON(),
     mergedCommand.data.toJSON(),
     skhiratCommand.data.toJSON(),
+    rosterCommand.data.toJSON(),
 ];
 
 const rest = new REST().setToken(process.env.DISCORD_TOKEN);
