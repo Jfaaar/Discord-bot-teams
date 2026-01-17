@@ -1,4 +1,5 @@
 const { createAudioPlayer, createAudioResource, joinVoiceChannel, AudioPlayerStatus, VoiceConnectionStatus, entersState, StreamType } = require('@discordjs/voice');
+const ytdl = require('@distube/ytdl-core');
 const playDl = require('play-dl');
 
 
@@ -11,7 +12,7 @@ const queues = new Map();
         // Check if YouTube search works
         const ytInfo = await playDl.yt_validate('https://www.youtube.com/watch?v=dQw4w9WgXcQ');
         console.log('✅ play-dl YouTube validation:', ytInfo);
-        console.log('✅ Using play-dl for streaming');
+        console.log('✅ Using @distube/ytdl-core for streaming');
     } catch (error) {
         console.error('⚠️ play-dl validation error:', error.message);
     }
@@ -109,13 +110,17 @@ async function playNext(queue) {
             await queue.textChannel.send(`🎵 **Now playing:** ${song.title}`);
         }
 
-        // Use play-dl for more reliable streaming (fixes "Sign in to confirm you're not a bot")
-        const stream = await playDl.stream(song.url);
-        console.log(`✅ Stream created with play-dl`);
-
-        const resource = createAudioResource(stream.stream, {
-            inputType: stream.type,
+        // Use @distube/ytdl-core for reliable streaming
+        const stream = ytdl(song.url, {
+            filter: 'audioonly',
+            highWaterMark: 1 << 25, // Set high watermark to prevent stream cutting off
+            quality: 'highestaudio',
+            dlChunkSize: 0, // Disable chunking to prevent ECONNRESET
         });
+
+        console.log(`✅ Stream created with @distube/ytdl-core`);
+
+        const resource = createAudioResource(stream);
 
         queue.player.play(resource);
         queue.connection.subscribe(queue.player);
