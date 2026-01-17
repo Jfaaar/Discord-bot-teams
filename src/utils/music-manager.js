@@ -109,18 +109,12 @@ async function playNext(queue) {
             await queue.textChannel.send(`🎵 **Now playing:** ${song.title}`);
         }
 
-        // Use ytdl-core instead of play-dl for more reliable streaming
-        const stream = ytdl(song.url, {
-            filter: 'audioonly',
-            quality: 'highestaudio',
-            highWaterMark: 1 << 25, // 32MB buffer for stability
-            liveBuffer: 40000,      // 40s buffer for live streams
-            dlChunkSize: 0,         // Disabling chunking is recommended in discord bot
-        });
-        console.log(`✅ Stream created with ytdl-core`);
+        // Use play-dl for more reliable streaming (fixes "Sign in to confirm you're not a bot")
+        const stream = await playDl.stream(song.url);
+        console.log(`✅ Stream created with play-dl`);
 
-        const resource = createAudioResource(stream, {
-            inputType: StreamType.Arbitrary,
+        const resource = createAudioResource(stream.stream, {
+            inputType: stream.type,
         });
 
         queue.player.play(resource);
