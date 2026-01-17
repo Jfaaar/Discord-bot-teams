@@ -1,18 +1,19 @@
-const { createAudioPlayer, createAudioResource, joinVoiceChannel, AudioPlayerStatus, VoiceConnectionStatus, entersState } = require('@discordjs/voice');
+const { createAudioPlayer, createAudioResource, joinVoiceChannel, AudioPlayerStatus, VoiceConnectionStatus, entersState, StreamType } = require('@discordjs/voice');
 const playDl = require('play-dl');
+const ytdl = require('@distube/ytdl-core');
 
 // Store for music queues per guild
 const queues = new Map();
 
-// Initialize play-dl authorization check
+// Initialize validation check
 (async () => {
     try {
-        // Check if YouTube authorization is valid
+        // Check if YouTube search works
         const ytInfo = await playDl.yt_validate('https://www.youtube.com/watch?v=dQw4w9WgXcQ');
         console.log('✅ play-dl YouTube validation:', ytInfo);
+        console.log('✅ Using @distube/ytdl-core for streaming');
     } catch (error) {
-        console.error('⚠️ play-dl YouTube authorization may be required:', error.message);
-        console.log('💡 To fix music playback, you may need to run: npx play-dl --setup');
+        console.error('⚠️ play-dl validation error:', error.message);
     }
 })();
 
@@ -108,11 +109,16 @@ async function playNext(queue) {
             await queue.textChannel.send(`🎵 **Now playing:** ${song.title}`);
         }
 
-        const stream = await playDl.stream(song.url);
-        console.log(`✅ Stream created, type: ${stream.type}`);
+        // Use ytdl-core instead of play-dl for more reliable streaming
+        const stream = ytdl(song.url, {
+            filter: 'audioonly',
+            quality: 'highestaudio',
+            highWaterMark: 1 << 25, // 32MB buffer for stability
+        });
+        console.log(`✅ Stream created with ytdl-core`);
 
-        const resource = createAudioResource(stream.stream, {
-            inputType: stream.type,
+        const resource = createAudioResource(stream, {
+            inputType: StreamType.Arbitrary,
         });
 
         queue.player.play(resource);
