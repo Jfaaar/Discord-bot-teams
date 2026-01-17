@@ -8,6 +8,7 @@ const skhiratCommand = require('./commands/skhirat');
 const rosterCommand = require('./commands/roster');
 const pollCommand = require('./commands/poll');
 const savePositionsCommand = require('./commands/save-positions');
+const resetPositionsCommand = require('./commands/reset-positions');
 
 const commands = [
     teamsCommand.data.toJSON(),
@@ -18,6 +19,7 @@ const commands = [
     rosterCommand.data.toJSON(),
     pollCommand.data.toJSON(),
     savePositionsCommand.data.toJSON(),
+    resetPositionsCommand.data.toJSON(),
 ];
 
 const rest = new REST().setToken(process.env.DISCORD_TOKEN);
