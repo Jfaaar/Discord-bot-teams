@@ -1,6 +1,6 @@
 const { createAudioPlayer, createAudioResource, joinVoiceChannel, AudioPlayerStatus, VoiceConnectionStatus, entersState, StreamType } = require('@discordjs/voice');
 const playDl = require('play-dl');
-const ytdl = require('@distube/ytdl-core');
+
 
 // Store for music queues per guild
 const queues = new Map();
@@ -11,7 +11,7 @@ const queues = new Map();
         // Check if YouTube search works
         const ytInfo = await playDl.yt_validate('https://www.youtube.com/watch?v=dQw4w9WgXcQ');
         console.log('✅ play-dl YouTube validation:', ytInfo);
-        console.log('✅ Using @distube/ytdl-core for streaming');
+        console.log('✅ Using play-dl for streaming');
     } catch (error) {
         console.error('⚠️ play-dl validation error:', error.message);
     }
