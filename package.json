@@ -1,6 +1,9 @@
 {
   "name": "discord-team-splitter",
   "version": "1.0.0",
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "description": "Discord bot that splits voice channel members into two teams",
   "main": "src/index.js",
   "scripts": {
