@@ -114,6 +114,8 @@ async function playNext(queue) {
             filter: 'audioonly',
             quality: 'highestaudio',
             highWaterMark: 1 << 25, // 32MB buffer for stability
+            liveBuffer: 40000,      // 40s buffer for live streams
+            dlChunkSize: 0,         // Disabling chunking is recommended in discord bot
         });
         console.log(`✅ Stream created with ytdl-core`);
 
