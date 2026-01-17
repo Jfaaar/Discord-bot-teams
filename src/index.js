@@ -9,6 +9,8 @@ const rosterCommand = require('./commands/roster');
 const pollCommand = require('./commands/poll');
 const savePositionsCommand = require('./commands/save-positions');
 const resetPositionsCommand = require('./commands/reset-positions');
+const playCommand = require('./commands/play');
+const stopCommand = require('./commands/stop');
 
 // Create Discord client with necessary intents
 const client = new Client({
@@ -29,6 +31,8 @@ client.commands.set(rosterCommand.data.name, rosterCommand);
 client.commands.set(pollCommand.data.name, pollCommand);
 client.commands.set(savePositionsCommand.data.name, savePositionsCommand);
 client.commands.set(resetPositionsCommand.data.name, resetPositionsCommand);
+client.commands.set(playCommand.data.name, playCommand);
+client.commands.set(stopCommand.data.name, stopCommand);
 
 // Bot ready event
 client.once('ready', () => {

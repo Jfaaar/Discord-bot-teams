@@ -9,6 +9,8 @@ const rosterCommand = require('./commands/roster');
 const pollCommand = require('./commands/poll');
 const savePositionsCommand = require('./commands/save-positions');
 const resetPositionsCommand = require('./commands/reset-positions');
+const playCommand = require('./commands/play');
+const stopCommand = require('./commands/stop');
 
 const commands = [
     teamsCommand.data.toJSON(),
@@ -20,6 +22,8 @@ const commands = [
     pollCommand.data.toJSON(),
     savePositionsCommand.data.toJSON(),
     resetPositionsCommand.data.toJSON(),
+    playCommand.data.toJSON(),
+    stopCommand.data.toJSON(),
 ];
 
 const rest = new REST().setToken(process.env.DISCORD_TOKEN);
