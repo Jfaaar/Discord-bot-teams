@@ -102,6 +102,12 @@ async function playNext(queue) {
 
     try {
         console.log(`🎵 Attempting to stream: ${song.url}`);
+
+        // Send "now playing" message to Discord
+        if (queue.textChannel) {
+            await queue.textChannel.send(`🎵 **Now playing:** ${song.title}`);
+        }
+
         const stream = await playDl.stream(song.url);
         console.log(`✅ Stream created, type: ${stream.type}`);
 
@@ -113,9 +119,20 @@ async function playNext(queue) {
         queue.connection.subscribe(queue.player);
         console.log('✅ Audio player started');
 
+        // Confirm playback started
+        if (queue.textChannel) {
+            await queue.textChannel.send(`✅ **Playback started!**`);
+        }
+
     } catch (error) {
         console.error('❌ Error playing song:', error.message);
         console.error('Full error:', error);
+
+        // Send error message to Discord
+        if (queue.textChannel) {
+            await queue.textChannel.send(`❌ **Error playing "${song.title}":**\n\`\`\`${error.message}\`\`\``);
+        }
+
         queue.songs.shift();
         playNext(queue);
     }
@@ -141,8 +158,11 @@ async function connectAndPlay(queue) {
             playNext(queue);
         });
 
-        queue.player.on('error', (error) => {
+        queue.player.on('error', async (error) => {
             console.error('Audio player error:', error);
+            if (queue.textChannel) {
+                await queue.textChannel.send(`❌ **Audio player error:**\n\`\`\`${error.message}\`\`\``);
+            }
             queue.songs.shift();
             playNext(queue);
         });
