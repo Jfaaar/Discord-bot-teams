@@ -6,6 +6,8 @@ const qawdtihaCommand = require('./commands/9awdtiha');
 const mergedCommand = require('./commands/merged');
 const skhiratCommand = require('./commands/skhirat');
 const rosterCommand = require('./commands/roster');
+const pollCommand = require('./commands/poll');
+const savePositionsCommand = require('./commands/save-positions');
 
 const commands = [
     teamsCommand.data.toJSON(),
@@ -14,6 +16,8 @@ const commands = [
     mergedCommand.data.toJSON(),
     skhiratCommand.data.toJSON(),
     rosterCommand.data.toJSON(),
+    pollCommand.data.toJSON(),
+    savePositionsCommand.data.toJSON(),
 ];
 
 const rest = new REST().setToken(process.env.DISCORD_TOKEN);
