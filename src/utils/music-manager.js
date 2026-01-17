@@ -4,6 +4,18 @@ const playDl = require('play-dl');
 // Store for music queues per guild
 const queues = new Map();
 
+// Initialize play-dl authorization check
+(async () => {
+    try {
+        // Check if YouTube authorization is valid
+        const ytInfo = await playDl.yt_validate('https://www.youtube.com/watch?v=dQw4w9WgXcQ');
+        console.log('✅ play-dl YouTube validation:', ytInfo);
+    } catch (error) {
+        console.error('⚠️ play-dl YouTube authorization may be required:', error.message);
+        console.log('💡 To fix music playback, you may need to run: npx play-dl --setup');
+    }
+})();
+
 /**
  * Get or create a queue for a guild
  */
@@ -48,9 +60,14 @@ function deleteQueue(guildId) {
  */
 async function searchYouTube(query) {
     try {
+        console.log(`🔍 Searching YouTube for: ${query}`);
         const results = await playDl.search(query, { limit: 1 });
-        if (results.length === 0) return null;
+        if (results.length === 0) {
+            console.log('❌ No results found for query:', query);
+            return null;
+        }
 
+        console.log(`✅ Found: ${results[0].title}`);
         return {
             title: results[0].title,
             url: results[0].url,
@@ -58,7 +75,8 @@ async function searchYouTube(query) {
             thumbnail: results[0].thumbnails[0]?.url || null,
         };
     } catch (error) {
-        console.error('YouTube search error:', error);
+        console.error('❌ YouTube search error:', error.message);
+        console.error('Full error:', error);
         return null;
     }
 }
@@ -83,16 +101,21 @@ async function playNext(queue) {
     queue.playing = true;
 
     try {
+        console.log(`🎵 Attempting to stream: ${song.url}`);
         const stream = await playDl.stream(song.url);
+        console.log(`✅ Stream created, type: ${stream.type}`);
+
         const resource = createAudioResource(stream.stream, {
             inputType: stream.type,
         });
 
         queue.player.play(resource);
         queue.connection.subscribe(queue.player);
+        console.log('✅ Audio player started');
 
     } catch (error) {
-        console.error('Error playing song:', error);
+        console.error('❌ Error playing song:', error.message);
+        console.error('Full error:', error);
         queue.songs.shift();
         playNext(queue);
     }
