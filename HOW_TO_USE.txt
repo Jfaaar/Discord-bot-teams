@@ -1,0 +1,35 @@
+# 🤖 FC MERGED Bot - User Guide
+
+Here is a quick guide on how to use the bot commands!
+
+## 🔊 Voice Channel Commands
+* **`/merged`**
+  Moves **everyone** currently in any voice channel to the **Merged** voice channel.
+* **`/skhirat`**
+  Moves **everyone** currently in any voice channel to the **Skhirat** voice channel.
+* **`/9awdtiha @user`**
+  Moves **you and the tagged user** to a private voice channel.
+
+## 🎵 Music Commands
+* **`/play [song name]`**
+  Plays a song from YouTube in your current voice channel.
+* **`/stop`**
+  Stops the music, clears the queue, and disconnects the bot.
+
+## ⚽ Teams & Pro Clubs Commands
+* **`/teams`**
+  Randomly splits all players in your voice channel into **two teams** (FC MERGED vs Skhirat FC) and automatically moves them to their team channels.
+
+### 📋 Position & Roster Management
+* **`/poll`**
+  Creates a poll for players to react with their preferred positions (GK, CB, CDM, ST, etc.).
+* **`/save-positions [message_id]`**
+  Saves the positions from the poll reactions.
+  *(Usage: Right-click the poll message → Copy Message ID → Paste into command)*
+* **`/roster`**
+  Shows all online players, their saved preferred positions, and **automatically generates a lineup** (prioritizing Attack → Midfield → Defense).
+  *Great for quickly seeing who plays where!*
+* **`/positions [formation]`**
+  Generates a lineup for a specific formation (e.g., `4-2-1-3`, `4-1-2-1-2`) using the players in the voice channel.
+* **`/reset-positions [optional: player]`**
+  Clears saved position data for a specific player (or everyone, if no player is specified).
