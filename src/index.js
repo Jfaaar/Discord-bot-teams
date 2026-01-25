@@ -11,6 +11,7 @@ const savePositionsCommand = require('./commands/save-positions');
 const resetPositionsCommand = require('./commands/reset-positions');
 const playCommand = require('./commands/play');
 const stopCommand = require('./commands/stop');
+const moveCommand = require('./commands/move');
 
 // Create Discord client with necessary intents
 const client = new Client({
@@ -33,10 +34,12 @@ client.commands.set(savePositionsCommand.data.name, savePositionsCommand);
 client.commands.set(resetPositionsCommand.data.name, resetPositionsCommand);
 client.commands.set(playCommand.data.name, playCommand);
 client.commands.set(stopCommand.data.name, stopCommand);
+client.commands.set(moveCommand.data.name, moveCommand);
 
 // Bot ready event
 client.once('ready', () => {
   console.log(`✅ Bot is ready! Logged in as ${client.user.tag}`);
+  console.log('Registered commands:', Array.from(client.commands.keys()));
 });
 
 // Handle slash command interactions
