@@ -11,6 +11,7 @@ const savePositionsCommand = require('./commands/save-positions');
 const resetPositionsCommand = require('./commands/reset-positions');
 const playCommand = require('./commands/play');
 const stopCommand = require('./commands/stop');
+const callStatsCommand = require('./commands/call-stats');
 
 // Create Discord client with necessary intents
 const client = new Client({
@@ -33,6 +34,7 @@ client.commands.set(savePositionsCommand.data.name, savePositionsCommand);
 client.commands.set(resetPositionsCommand.data.name, resetPositionsCommand);
 client.commands.set(playCommand.data.name, playCommand);
 client.commands.set(stopCommand.data.name, stopCommand);
+client.commands.set(callStatsCommand.data.name, callStatsCommand);
 
 // Bot ready event
 client.once('ready', () => {
@@ -65,5 +67,12 @@ client.on('interactionCreate', async (interaction) => {
   }
 });
 
+
 // Login to Discord
 client.login(process.env.DISCORD_TOKEN);
+
+const CallTracker = require('./utils/CallTracker');
+
+client.on('voiceStateUpdate', (oldState, newState) => {
+  CallTracker.handleVoiceStateUpdate(oldState, newState);
+});
