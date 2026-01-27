@@ -12,6 +12,7 @@ const resetPositionsCommand = require('./commands/reset-positions');
 const playCommand = require('./commands/play');
 const stopCommand = require('./commands/stop');
 const callStatsCommand = require('./commands/call-stats');
+const moveCommand = require('./commands/move');
 
 const commands = [
     teamsCommand.data.toJSON(),
@@ -26,6 +27,7 @@ const commands = [
     playCommand.data.toJSON(),
     stopCommand.data.toJSON(),
     callStatsCommand.data.toJSON(),
+    moveCommand.data.toJSON(),
 ];
 
 const rest = new REST().setToken(process.env.DISCORD_TOKEN);

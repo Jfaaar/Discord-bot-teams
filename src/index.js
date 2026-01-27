@@ -12,6 +12,7 @@ const resetPositionsCommand = require('./commands/reset-positions');
 const playCommand = require('./commands/play');
 const stopCommand = require('./commands/stop');
 const callStatsCommand = require('./commands/call-stats');
+const moveCommand = require('./commands/move');
 
 // Create Discord client with necessary intents
 const client = new Client({
@@ -35,6 +36,7 @@ client.commands.set(resetPositionsCommand.data.name, resetPositionsCommand);
 client.commands.set(playCommand.data.name, playCommand);
 client.commands.set(stopCommand.data.name, stopCommand);
 client.commands.set(callStatsCommand.data.name, callStatsCommand);
+client.commands.set(moveCommand.data.name, moveCommand);
 
 // Bot ready event
 client.once('ready', () => {
